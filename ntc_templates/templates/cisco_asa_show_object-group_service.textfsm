@@ -1,0 +1,15 @@
+Value Filldown NAME (\S+)
+Value Filldown PROTOCOL (\S+)
+Value Filldown TYPE (service)
+Value PORT (\S+)
+Value RANGE_START (\d+)
+Value RANGE_END (\d+)
+
+Start
+  ^object-group -> Continue.Clearall
+  ^object-group\s+service\s+${NAME}(\s+(?P<PROTOCOL>tcp|udp))?\s* -> Continue
+  ^\s*port-object\s+eq\s+${PORT}\s* -> Record
+  ^\s+service-object\s+${PROTOCOL}\s+destination\s+eq\s+${PORT}\s* -> Record
+  ^\s+service-object\s+${PROTOCOL}\s+destination\s+range\s+${RANGE_START}\s+${RANGE_END}\s* -> Record
+
+EOF
